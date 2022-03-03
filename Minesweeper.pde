@@ -4,8 +4,9 @@ private final static int NUM_ROWS = 20;
 private final static int NUM_COLS = 20;
 private MSButton[][] buttons; //2d array of minesweeper buttons
 private ArrayList <MSButton> mines = new ArrayList <MSButton>(); //ArrayList of just the minesweeper buttons that are mined
-private final static int NUM_BOMBS = 3;
+private final static int NUM_BOMBS = 70;
 private boolean lost = false;
+private int clearedCount = 0;
 
 void setup ()
 {
@@ -28,6 +29,7 @@ void setup ()
 public void setMines()
 {
   //your code
+
   while (mines.size() < NUM_BOMBS) {
     int randomRow = (int)(Math.random()*NUM_ROWS);
     int randomCol = (int)(Math.random()*NUM_COLS);
@@ -38,9 +40,11 @@ public void setMines()
   }
 }
 
+
 public void draw ()
 {
   background( 0 );
+  println(clearedCount + ", " + (NUM_ROWS*NUM_COLS - mines.size()));
   if (isWon() == true)
     displayWinningMessage();
 }
@@ -54,7 +58,12 @@ public boolean isWon()
       num++;
     }
   }
-  
+
+  if (clearedCount == NUM_ROWS*NUM_COLS - mines.size()) {
+
+    return true;
+  }
+
   if (num == NUM_BOMBS) {
     return true;
   }
@@ -141,13 +150,16 @@ public class MSButton
     clicked = true;
     //your code here
     if (isWon() == false && lost == false) {
-    
-      if (mouseButton == RIGHT) {
+
+      if (mouseButton == LEFT && !mines.contains(this)) {
+        clearedCount++;
+      }
+
+      if (mouseButton == RIGHT && buttons[myRow][myCol].myLabel == "") {
         flagged = !flagged;
         if (flagged == false) {
           clicked = false;
         }
-      } else if (flagged == true) {
       } else if (mines.contains(this)) {
         displayLosingMessage();
       } else if (countMines(myRow, myCol)>0) {
@@ -156,6 +168,7 @@ public class MSButton
         for (int r = -1; r <=1; r++) {
           for (int c = -1; c <=1; c++) {
             if (isValid(myRow+r, myCol+c) && buttons[myRow+r][myCol+c].clicked == false) {
+              myLabel = " ";
               buttons[r+myRow][c+myCol].mousePressed();
             }
           }
@@ -163,7 +176,7 @@ public class MSButton
       }
     }
   }
-      
+
   public void draw () 
   {    
     if (flagged)
