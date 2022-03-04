@@ -36,7 +36,7 @@ public void setMines()
     if ((mines.contains(buttons[randomRow][randomCol])) == false) {
       mines.add(buttons[randomRow][randomCol]);
     }
-    System.out.println(randomRow+ "," +randomCol);
+   // System.out.println(randomRow+ "," +randomCol);
   }
 }
 
@@ -44,7 +44,7 @@ public void setMines()
 public void draw ()
 {
   background( 0 );
-  println(clearedCount + ", " + (NUM_ROWS*NUM_COLS - mines.size()));
+ // println(clearedCount + ", " + (NUM_ROWS*NUM_COLS - mines.size()));
   if (isWon() == true)
     displayWinningMessage();
 }
